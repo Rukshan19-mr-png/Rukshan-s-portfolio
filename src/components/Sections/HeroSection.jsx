@@ -26,7 +26,7 @@ const HeroSection = () => {
             <a
               href={resumePDF}
               className="btn btn-outline"
-              download="Maleesha_Rukshan_CV.pdf"
+              download="Maleesha_Rukshan.pdf"
               target="_blank"
               rel="noopener noreferrer"
             >
