@@ -52,7 +52,16 @@
 
 .hero-image-wrapper {
   flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
+}
+
+.hero-image-container {
+  position: relative;
+  width: 380px;
+  height: 380px;
   display: flex;
   justify-content: center;
   align-items: center;
