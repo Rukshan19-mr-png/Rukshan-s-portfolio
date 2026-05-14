@@ -36,9 +36,12 @@ const HeroSection = () => {
         </div>
         
         <div className="hero-image-wrapper animate-fade-in delay-200">
-          <div className="hero-image-backdrop"></div>
-          <div className="hero-image">
-            <img src={profileImage} alt="Maleesha Rukshan" />
+          <div className="hero-image-container">
+            <div className="hero-image-glow"></div>
+            <div className="hero-image-border"></div>
+            <div className="hero-image">
+              <img src={profileImage} alt="Maleesha Rukshan" />
+            </div>
           </div>
         </div>
       </div>
