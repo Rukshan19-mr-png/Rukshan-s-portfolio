@@ -30,7 +30,7 @@ const HeroSection = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Download CV <Download size={18} />
+              Maleesha Rukshan <Download size={18} />
             </a>
           </div>
         </div>
