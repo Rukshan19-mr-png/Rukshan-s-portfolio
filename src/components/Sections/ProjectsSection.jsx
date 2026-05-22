@@ -19,7 +19,7 @@ const projectsData = [
     description: 'Interactive analytics dashboard for e-commerce platforms. Visualizes sales data, user metrics, and inventory status with beautiful charts and responsive UI.',
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop',
     tags: ['React', 'Express', 'Node.js', 'MongoDB'],
-    githubLink: '#',
+    githubLink: 'https://github.com/Rukshan19-mr-png/E-commerce-website',
     liveLink: '#'
   },
   {

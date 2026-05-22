@@ -13,6 +13,17 @@ const ContactSection = () => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
+  const [submitMessage, setSubmitMessage] = useState('');
+
+  const fallbackEmail = 'maleesharukshan19@gmail.com';
+
+  const createMailToLink = () => {
+    const subject = encodeURIComponent(formData.subject || 'Portfolio message');
+    const body = encodeURIComponent(
+      `Name: ${formData.name || 'N/A'}\nEmail: ${formData.email || 'N/A'}\n\n${formData.message || ''}`
+    );
+    return `mailto:${fallbackEmail}?subject=${subject}&body=${body}`;
+  };
 
   const validate = () => {
     const newErrors = {};
@@ -41,22 +52,57 @@ const ContactSection = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
-      setIsSubmitting(true);
-      
-      // Simulate API call
-      setTimeout(() => {
-        setIsSubmitting(false);
-        setSubmitStatus('success');
-        setFormData({ name: '', email: '', subject: '', message: '' });
-        
-        setTimeout(() => setSubmitStatus(null), 5000);
-      }, 1500);
-    } else {
+    if (!validate()) {
       setSubmitStatus('error');
+      setSubmitMessage('Please fix the errors above.');
       setTimeout(() => setSubmitStatus(null), 3000);
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+    setSubmitMessage('');
+
+    try {
+      const submissionData = new FormData();
+      submissionData.append('name', formData.name);
+      submissionData.append('email', formData.email);
+      submissionData.append('subject', formData.subject);
+      submissionData.append('message', formData.message);
+      submissionData.append('_replyto', formData.email);
+      submissionData.append('_subject', `New message from ${formData.name}`);
+      submissionData.append('_template', 'table');
+      submissionData.append('_captcha', 'false');
+
+      const response = await fetch('https://formsubmit.co/ajax/maleesharukshan19@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json'
+        },
+        body: submissionData
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send message');
+      }
+
+      const data = await response.json();
+      if (data.success !== 'true' && data.success !== true) {
+        throw new Error(data.message || 'Email service rejected the request');
+      }
+
+      setSubmitStatus('success');
+      setSubmitMessage('Message sent successfully! I will get back to you soon.');
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch (error) {
+      console.error('Contact form submit error:', error);
+      setSubmitStatus('error');
+      setSubmitMessage('Unable to send your message right now. Please try again later. You can also email me directly.');
+    } finally {
+      setIsSubmitting(false);
+      setTimeout(() => setSubmitStatus(null), 5000);
     }
   };
 
@@ -161,10 +207,15 @@ const ContactSection = () => {
               </button>
 
               {submitStatus === 'success' && (
-                <div className="submit-success">Message sent successfully!</div>
+                <div className="submit-success">{submitMessage || 'Message sent successfully!'}</div>
               )}
               {submitStatus === 'error' && (
-                <div className="submit-error">Please fix the errors above.</div>
+                <div className="submit-error">
+                  {submitMessage || 'Please fix the errors above.'}
+                  <div className="fallback-link">
+                    <a href={createMailToLink()} target="_blank" rel="noreferrer">Send email directly</a>
+                  </div>
+                </div>
               )}
             </form>
           </div>
